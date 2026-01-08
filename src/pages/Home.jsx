@@ -1,11 +1,82 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import heroLogo from "../assets/images/hero-logo.png";
 import "./css/Home.css";
-
+import api from '../utils/api';
+import { LoaderCircle } from "lucide-react";
+import { HashLink } from 'react-router-hash-link';
 
 const Home = () => {
 
-    
+    const [loading, setLoading] = useState(true);
+    const [profile, setProfile] = useState(null);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+
+        // AbortController for cleanup (production best practice)
+        const controller = new AbortController();
+
+        const fetchProfile = async () => {
+            try {
+                setLoading(true);
+                const response = await api.get("/api/user/profiles/", {
+                    signal: controller.singnal,
+                });
+
+                if(response.data.success) {
+                    setProfile(response.data.payload);
+                }
+                else{
+                    setError("Failed to load profile data");
+                }
+
+
+
+            } catch (err) {
+                if (err.name === 'CanceledError') {
+                    console.log('Fetch canceled');
+                    return;
+                } 
+
+                setError(err.response?.data?.message || 'Something went wrong');
+                console.error('Profile fetch error:', err);
+
+            }
+
+            finally{
+                setLoading(false);
+            }
+
+
+        };
+
+        fetchProfile();
+        return () => controller.abort();
+
+    }, [])
+
+    if(loading){
+        return (
+            <div className='flex items-center justify-center min-h-96'>
+                <LoaderCircle className='animate-spin text-blue-600'
+                    size={35}
+                />
+            </div>
+        )
+    }
+
+    if (error) {
+        return (
+            <div className="error-container flex items-center justify-center flex-col min-h-48">
+                <p>Error: {error}</p>
+                <button className="w-20 h-7.5 text-white cursor-pointer bg-blue-500" onClick={() => window.location.reload()}>
+                    Retry
+                </button>
+                
+            </div>
+            
+        );
+    }
     
     
 
@@ -14,13 +85,13 @@ const Home = () => {
         <section id="hero">
             <div className="hero-container">
                 <div className="hero-logo">
-                    <img src={heroLogo} alt="#" />
+                    <img src={ profile.profile_image_url || heroLogo} alt="#" />
                 </div>
                 <div className="hero-right">
                     <div className="hero-des">
-                        <h1>Shahadat Hossain</h1>
+                        <h1>{profile.name || "Shahadat Hossain"}</h1>
                         <p>
-                            Frontend Developer from Bangladesh with experience in building responsive and user-friendly websites.
+                            Full Stack Developer from Bangladesh with experience in building responsive and user-friendly websites.
                         </p>
 
                     </div>
@@ -32,10 +103,10 @@ const Home = () => {
                             <a href="https://github.com/muhammad-shahadat" target="_blank">GITHUB</a>
                         </li>
                         <li>
-                            <a href="#projects">PROJECTS</a>
+                            <HashLink  smooth to="#projects">PROJECTS</HashLink>
                         </li>
                         <li>
-                            <a href="#resume">RESUME</a>
+                            <HashLink  smooth to="#resume">RESUME</HashLink>
                         </li>
 
                     </ul>
@@ -53,7 +124,8 @@ const Home = () => {
                 </div>
                 <div className="about-right">
                     <p>
-                        I'm a frontend developer and Software Engineering student at Daffodil International University, Bangladesh. I build responsive, user-friendly websites using React, JavaScript, HTML, CSS, Tailwind CSS and Bootstrap. I’ve completed several hands-on projects, all deployed on Netlify and hosted on GitHub. I’m working toward full-stack development and open to freelance and remote opportunities.
+                        { profile?.bio || "I'm a frontend developer and Software Engineering student at Daffodil International University, Bangladesh. I build responsive, user-friendly websites using React, JavaScript, HTML, CSS, Tailwind CSS and Bootstrap. I’ve completed several hands-on projects, all deployed on Netlify and hosted on GitHub. I’m working toward full-stack development and open to freelance and remote opportunities."
+                        }
                     </p>
                 </div>
             </div>
@@ -235,14 +307,14 @@ const Home = () => {
                     <ul className="resume-item">
                         <li className="item-list resume-list">
                             👁️
-                            <a href="/resume/shahadat_hossain_resume.pdf" target="_blank" className="resume-link view-resume">
+                            <a href={profile?.resume_url || "/resume/shahadat_hossain_resume.pdf"} target="_blank" className="resume-link view-resume">
                                 View Resume
                             </a>
                              
                         </li>
                         <li className="resume-list item-list">
                             📥
-                            <a href="/resume/shahadat_hossain_resume.pdf" className="resume-link download-resume" download="md_shahadat_hossain_resume" rel="noopener noreferrer">  
+                            <a href={profile?.resume_url || "/resume/shahadat_hossain_resume.pdf"} className="resume-link download-resume" download="md_shahadat_hossain_resume" rel="noopener noreferrer">  
                                Download Resume
 
                             </a>

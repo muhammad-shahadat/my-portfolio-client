@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import "./Header.css";
 import  {FaBars } from "react-icons/fa";
+import {HashLink} from "react-router-hash-link"
 import navLogo from "../../assets/images/nav-logo.png";
 
 
@@ -37,40 +38,40 @@ const Header = () => {
                 <div className="navbar-menu">
                     <ul className="menu-list" ref={menuListRef} >
                         <li>
-                            <a href="#hero">
+                            <HashLink smooth to="#hero">
                                 Home 
-                            </a>
+                            </HashLink>
                         </li>
                         <li>
-                            <a href="#about-me">
+                            <HashLink smooth to="#about-me">
                                 About Me
-                            </a>
+                            </HashLink>
                         </li>
                         <li>
-                            <a href="#projects">
+                            <HashLink smooth to="#projects">
                                 Projects
 
-                            </a>
+                            </HashLink>
                         </li>
 
                         <li>
-                            <a href="#skills">
+                            <HashLink smooth to="#skills">
                                 Skills
 
-                            </a>
+                            </HashLink>
                         </li>
 
                         <li>
-                            <a href="#resume">
+                            <HashLink smooth to="#resume">
                                 Resume
 
-                            </a>
+                            </HashLink>
                         </li>
 
                         <li>
-                            <a href="#contacts">
+                            <HashLink smooth to="#contacts">
                                 Contacts
-                            </a>
+                            </HashLink>
                         </li>
                         
                             
