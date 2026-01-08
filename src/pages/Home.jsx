@@ -16,51 +16,58 @@ const Home = () => {
         // AbortController for cleanup (production best practice)
         const controller = new AbortController();
 
-        const fetchProfile = async () => {
+        const wakeAndFetchProfile = async () => {
+
             try {
+
                 setLoading(true);
-                const response = await api.get("/api/user/profiles/", {
-                    signal: controller.singnal,
+
+                //wake up server
+                await api.get("/health", {
+                signal: controller.signal,
                 });
 
-                if(response.data.success) {
+                //now fetch real data
+                const response = await api.get("/api/user/profiles/", {
+                    signal: controller.signal,
+                });
+
+                if (response.data.success) {
                     setProfile(response.data.payload);
-                }
-                else{
+                } else {
                     setError("Failed to load profile data");
                 }
 
 
-
             } catch (err) {
-                if (err.name === 'CanceledError') {
-                    console.log('Fetch canceled');
+                if (err.name === "CanceledError") {
+                    console.log("Fetch canceled");
                     return;
-                } 
+                }
 
-                setError(err.response?.data?.message || 'Something went wrong');
-                console.error('Profile fetch error:', err);
+                setError(
+                    err.response?.data?.message ||
+                    "Server is waking up… please wait and refresh ⏳"
+                );
+                console.error("Profile fetch error:", err);
 
-            }
-
-            finally{
+            } finally {
                 setLoading(false);
             }
 
-
         };
 
-        fetchProfile();
+        wakeAndFetchProfile();
+
         return () => controller.abort();
 
     }, [])
 
     if(loading){
         return (
-            <div className='flex items-center justify-center min-h-96'>
-                <LoaderCircle className='animate-spin text-blue-600'
-                    size={35}
-                />
+            <div className="flex items-center justify-center min-h-96">
+                <LoaderCircle className="animate-spin text-blue-600" size={35} />
+                <span className="ml-2">Waking up server...</span>
             </div>
         )
     }
@@ -68,11 +75,13 @@ const Home = () => {
     if (error) {
         return (
             <div className="error-container flex items-center justify-center flex-col min-h-48">
-                <p>Error: {error}</p>
-                <button className="w-20 h-7.5 text-white cursor-pointer bg-blue-500" onClick={() => window.location.reload()}>
+                <p>{error}</p>
+                <button
+                    className="w-20 h-7.5 text-white cursor-pointer bg-blue-500"
+                    onClick={() => window.location.reload()}
+                >
                     Retry
                 </button>
-                
             </div>
             
         );
