@@ -94,11 +94,11 @@ const Home = () => {
         <section id="hero">
             <div className="hero-container">
                 <div className="hero-logo">
-                    <img src={ profile.profile_image_url || heroLogo} alt="#" />
+                    <img src={ profile?.profile_image_url || heroLogo} alt="#" />
                 </div>
                 <div className="hero-right">
                     <div className="hero-des">
-                        <h1>{profile.name || "Shahadat Hossain"}</h1>
+                        <h1>{profile?.name || "Shahadat Hossain"}</h1>
                         <p>
                             Full Stack Developer from Bangladesh with experience in building responsive and user-friendly websites.
                         </p>
