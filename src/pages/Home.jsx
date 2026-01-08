@@ -24,7 +24,7 @@ const Home = () => {
 
                 //wake up server
                 await api.get("/health", {
-                signal: controller.signal,
+                    signal: controller.signal,
                 });
 
                 //now fetch real data
