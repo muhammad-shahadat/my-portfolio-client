@@ -1,14 +1,44 @@
-#footer{
+#footer {
     width: 90%;
     margin: 80px auto 30px;
-    padding: 48px 0px 0px;
+    padding: 30px 0px 0px; /* প্যাডিং সামান্য অপ্টিমাইজ করা হয়েছে */
+    border-top: 1px solid #334155; /* নেভবারের সাথে মিল রেখে উপরে একটি হালকা প্রিমিয়াম সেপারেটর লাইন */
 }
-.footer-container{
+
+.footer-container {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: flex-start; /* ডেস্কটপে বাম পাশ থেকেই শুরু হবে */
 }
-.footer-container p{
+
+.footer-container p {
     font-size: 14px;
     color: #9ca3af;
+    letter-spacing: 0.5px;
+}
+
+/* আপনার ব্র্যান্ড নেম বা ইউজারনেম হাইলাইট করার জন্য */
+.footer-brand {
+    color: #38bdf8; /* নেভবারের থিমের সাথে মিল রেখে স্কাই ব্লু কালার */
+    font-weight: 500;
+}
+
+/*========================================
+Small Devices (Responsive Layout)
+==========================================*/
+@media screen and (max-width: 700px) {
+    #footer {
+        width: 100%;
+        margin: 60px auto 20px;
+        padding: 20px 20px 0px; /* মোবাইলে দুই পাশে হালকা স্পেস */
+    }
+
+    .footer-container {
+        justify-content: center; /* মোবাইলে লেখাটা একদম মাঝখানে দেখাবে, যা স্ট্যান্ডার্ড */
+    }
+    
+    .footer-container p {
+        font-size: 13px;
+        text-align: center;
+    }
 }

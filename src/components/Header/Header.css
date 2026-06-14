@@ -1,75 +1,123 @@
-nav{
+nav {
     width: 90%;
     margin: 0 auto;
     height: 75px;
     background-color: #1e293b; 
     border-radius: 10px;
     position: fixed;
-    top: 0;
+    top: 10px;
     left: 0;
     right: 0;
     z-index: 999;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* মডার্ন গ্লোয়িং শ্যাডো */
 }
 
-.navbar{
+.navbar {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between; /* ডিস্ট্রিবিউশন আরও ক্লিন করার জন্য */
+    padding: 0 40px;
     height: 75px;
     position: relative;
 }
-.logo{
+
+.logo {
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.logo img{
-    height: 60px;
-    width: 60px;
+
+.logo img {
+    height: 50px; /* সাইজ সামান্য অপ্টিমাইজ করা হয়েছে */
+    width: 50px;
     border-radius: 50%;
     background-color: #FDFCFC;
-    box-shadow: 0 0 2px 0 #fff;
-    
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    transition: transform 0.3s ease;
 }
 
-.navbar-menu .menu-list{
+.logo img:hover {
+    transform: scale(1.05); /* লোগোর ওপর মাউস নিলে হালকা বড় হবে */
+}
+
+.navbar-menu .menu-list {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 50px;
+    gap: 40px;
 }
-.navbar-menu ul li a{
+
+.navbar-menu ul li a {
+    color: #cbd5e1; /* অফ-হোয়াইট কালার যা চোখের জন্য আরামদায়ক */
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    position: relative;
+    padding: 8px 0;
+    transition: color 0.3s ease;
+}
+
+/* মডার্ন হোভার অ্যানিমেশন (নিচ থেকে আন্ডারলাইন আসবে) */
+.navbar-menu ul li a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #38bdf8; /* সুন্দর স্কাই ব্লু হাইলাইট */
+    transform-origin: bottom right;
+    transition: transform 0.3s ease-out;
+}
+
+.navbar-menu ul li a:hover {
     color: #fff;
 }
-.hamburger-icon{
+
+.navbar-menu ul li a:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.hamburger-icon {
     display: none;
 }
-.hamburger-icon button{
+
+.hamburger-icon button {
     border: none;
     font-size: 24px;
-    background-color: #1e293b;
+    background-color: transparent;
     color: #fff;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s ease;
+}
+
+.hamburger-icon button:active {
+    transform: scale(0.9); /* ক্লিক করলে বাটন একটু ডাববে */
 }
 
 /*========================================
-small device
+Small Devices (Responsive Layout)
 ==========================================*/
-@media screen and (max-width:700px) {
-
-    nav{
+@media screen and (max-width: 700px) {
+    nav {
         width: 100%;
         border-radius: 0;
+        top: 0; /* মোবাইলে একদম উপরে ফিক্সড থাকবে */
     }
-    .navbar{
-        justify-content: space-between;
-        padding: 10px 20px;
+
+    .navbar {
+        padding: 0 20px;
     }
-    .hamburger-icon{
+
+    .hamburger-icon {
         display: block;
     }
     
-    .navbar-menu .menu-list{
+    .navbar-menu .menu-list {
         position: absolute;
         flex-direction: column;
         gap: 0px;
@@ -79,16 +127,31 @@ small device
         background-color: #1e293b;
         overflow: hidden;
         max-height: 0px;
-        transition: all 0.5s ease-in-out;
-         
+        transition: all 0.4s ease-in-out;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        border-top: 1px solid #334155; /* মেনু ওপেন হলে হালকা সেপারেটর লাইন */
     }
 
-    .navbar-menu ul li{
+    .navbar-menu ul li {
         display: block;
-        padding: 10px;
+        width: 100%;
+        text-align: center; /* মোবাইলে লেখাগুলো মাঝখানে থাকবে */
     }
-    
-    
-   
-    
+
+    .navbar-menu ul li a {
+        display: block;
+        padding: 15px 0;
+        font-size: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03); /* হালকা বর্ডার */
+    }
+
+    /* মোবাইলের জন্য হোভারের আন্ডারলাইন ইফেক্ট বন্ধ করা হয়েছে */
+    .navbar-menu ul li a::after {
+        display: none;
+    }
+
+    .navbar-menu ul li a:hover {
+        background-color: #334155; /* মোবাইলে টাচ করলে ব্যাকগ্রাউন্ড হাইলাইট হবে */
+        color: #38bdf8;
+    }
 }

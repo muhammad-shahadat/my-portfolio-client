@@ -1,378 +1,276 @@
-import React, { useEffect, useState } from 'react';
-import heroLogo from "../assets/images/hero-logo.png";
-import "./css/Home.css";
-import api from '../utils/api';
-import { LoaderCircle } from "lucide-react";
+import React from 'react';
+// Lucide React Icons for Modern UI Look
+import {
+    Linkedin,
+    Github,
+    ExternalLink,
+    Eye,
+    Download,
+    Mail,
+    Phone,
+    MessageSquareCode
+} from "lucide-react";
 import { HashLink } from 'react-router-hash-link';
 
+import heroLogo from "../assets/images/hero-logo.png";
+import "./css/Home.css";
+
+
+
 const Home = () => {
-
-    const [loading, setLoading] = useState(true);
-    const [profile, setProfile] = useState(null);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-
-        // AbortController for cleanup (production best practice)
-        const controller = new AbortController();
-
-        const wakeAndFetchProfile = async () => {
-
-            try {
-
-                setLoading(true);
-
-                //wake up server
-                await api.get("/health", {
-                    signal: controller.signal,
-                });
-
-                //now fetch real data
-                const response = await api.get("/api/user/profiles/", {
-                    signal: controller.signal,
-                });
-
-                if (response.data.success) {
-                    setProfile(response.data.payload);
-                } else {
-                    setError("Failed to load profile data");
-                }
-
-
-            } catch (err) {
-                if (err.name === "CanceledError") {
-                    console.log("Fetch canceled");
-                    return;
-                }
-
-                setError(
-                    err.response?.data?.message ||
-                    "Server is waking up… please wait and refresh ⏳"
-                );
-                console.error("Profile fetch error:", err);
-
-            } finally {
-                setLoading(false);
-            }
-
-        };
-
-        wakeAndFetchProfile();
-
-        return () => controller.abort();
-
-    }, [])
-
-    if(loading){
-        return (
-            <div className="flex items-center justify-center min-h-96">
-                <LoaderCircle className="animate-spin text-blue-600" size={35} />
-                <span className="ml-2">Waking up server...</span>
-            </div>
-        )
-    }
-
-    if (error) {
-        return (
-            <div className="error-container flex items-center justify-center flex-col min-h-48">
-                <p>{error}</p>
-                <button
-                    className="w-20 h-7.5 text-white cursor-pointer bg-blue-500"
-                    onClick={() => window.location.reload()}
-                >
-                    Retry
-                </button>
-            </div>
-            
-        );
-    }
-    
-    
-
-  return (
-    <>
-        <section id="hero">
-            <div className="hero-container">
-                <div className="hero-logo">
-                    <img src={ profile?.profile_image_url || heroLogo} alt="#" />
+    return (
+        <>
+            {/* ================= HERO SECTION ================= */}
+            <section id="hero">
+                <div className="hero-container">
+                    <div className="hero-logo">
+                        <img src={heroLogo} alt="Shahadat Hossain" />
+                    </div>
+                    <div className="hero-right">
+                        <div className="hero-des">
+                            <h1>Shahadat Hossain</h1>
+                            <p>
+                                Full Stack Developer from Bangladesh specialized in building robust, scalable, and high-performance web applications using modern ecosystem stacks.
+                            </p>
+                        </div>
+                        <ul className="hero-menu-list">
+                            <li>
+                                <a href="https://www.linkedin.com/in/shahadatian/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/muhammad-shahadat" target="_blank" rel="noopener noreferrer">GITHUB</a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/muhammad-shahadat" target="_blank" rel="noopener noreferrer">PROJECTS</a>
+                            </li>
+                            <li>
+                                <HashLink smooth to="#resume">RESUME</HashLink>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div className="hero-right">
-                    <div className="hero-des">
-                        <h1>{profile?.name || "Shahadat Hossain"}</h1>
+            </section>
+
+            {/* ================= ABOUT ME SECTION ================= */}
+            <section id="about-me">
+                <div className="about-container">
+                    <div className="about-left">
+                        <h2>ABOUT ME</h2>
+                    </div>
+                    <div className="about-right">
                         <p>
-                            Full Stack Developer from Bangladesh with experience in building responsive and user-friendly websites.
-                        </p>
-
-                    </div>
-                    <ul className="hero-menu-list">
-                        <li>
-                            <a href="https://www.linkedin.com/in/shahadatian/" target="_blank">LINKEDIN</a>
-                        </li>
-                        <li>
-                            <a href="https://github.com/muhammad-shahadat" target="_blank">GITHUB</a>
-                        </li>
-                        <li>
-                            <HashLink  smooth to="#projects">PROJECTS</HashLink>
-                        </li>
-                        <li>
-                            <HashLink  smooth to="#resume">RESUME</HashLink>
-                        </li>
-
-                    </ul>
-
-                </div>
-            </div>
-
-        </section>
-
-        <section id="about-me">
-            <div className="about-container">
-                <div className="about-left">
-                    <h2>ABOUT ME</h2>
-
-                </div>
-                <div className="about-right">
-                    <p>
-                        { profile?.bio || "I'm a frontend developer and Software Engineering student at Daffodil International University, Bangladesh. I build responsive, user-friendly websites using React, JavaScript, HTML, CSS, Tailwind CSS and Bootstrap. I’ve completed several hands-on projects, all deployed on Netlify and hosted on GitHub. I’m working toward full-stack development and open to freelance and remote opportunities."
-                        }
-                    </p>
-                </div>
-            </div>
-
-        </section>
-
-        <section id="projects">
-            <div className="projects-container">
-                <div className="projects-left">
-                    <h2>PROJECTS</h2>
-                </div>
-                <div className="projects-right">
-                    <div className="e-commerce project-css">
-                        
-                        <h3 className="name">
-                            <a className="name-link" href="https://frontend-ecommerce-project.netlify.app/" target="_blank" >
-                                React E-Commerce Shop
-
-                            </a>
-                        </h3>
-                        
-                        <p className="description">
-                            A modern and responsive e-commerce frontend built with React, Vite, and custom CSS. Features include add-to-cart, cart summary, promo code input UI, and reusable components using React Context API. Deployed on Netlify.
-                        </p>
-                        <h3 className="netlify">
-                            <a href="https://frontend-ecommerce-project.netlify.app/" className="netlify-link" target="_blank" >
-                                🔗 Live Demo
-                            </a>
-                        </h3>
-                        <h3 className="github">
-                            <a href="https://github.com/muhammad-shahadat/frontend-e-commerce" className="github-link" target="_blank" >
-                                💻 GitHub Repository
-                            </a>
-                        </h3>
-                    </div>
-
-                    <div className="landing-page project-css">
-                        
-                        <h3 className="name">
-                            <a className="name-link" href="https://react-landing-page-shahadatian.netlify.app/" target="_blank" >
-                                React Landing Page
-
-                            </a>
-                        </h3>
-                        
-                        <p className="description">
-                            A modern and responsive langing page built with React, Vite, Tailwind CSS and custom CSS. Coded from a figam file shared in a youtube tutorial also help of the tutor.Features include reusable components, slick carousel for card slider.
-                        </p>
-                        <h3 className="netlify">
-                            <a href="https://react-landing-page-shahadatian.netlify.app/" className="netlify-link" target="_blank" >
-                                🔗 Live Demo
-                            </a>
-                        </h3>
-                        <h3 className="github">
-                            <a href="https://github.com/muhammad-shahadat/react-landing-page" className="github-link" target="_blank" >
-                                💻 GitHub Repository
-                            </a>
-                        </h3>
-                        <p className="note" style={{color: "#0f172a"}} >
-                            *Note: Design credit goes to the original Figma creator. This was a practice implementation.*
+                            I am a passionate Full-Stack Developer and Software Engineering student at Daffodil International University, Bangladesh. I specialize in crafting secure, database-driven web architectures using the MERN and PERN (PostgreSQL, Express, React, Node.js) stacks. Experienced in modern state management (TanStack Query, Zustand) and building production-ready authentication systems, I focus on solving complex engineering problems like transaction handling and hierarchical schema design. I am actively open to junior roles, internships, and remote opportunities globally.
                         </p>
                     </div>
-
-                    {/* <div className="upcoming-project">
-
-                    </div> */}
-
                 </div>
-            </div>
+            </section>
 
-        </section>
+            {/* ================= PROJECTS SECTION ================= */}
+            <section id="projects">
+                <div className="projects-container">
+                    <div className="projects-left">
+                        <h2>PROJECTS</h2>
+                    </div>
+                    <div className="projects-right">
 
-        <section id="skills">
-            <div className="skills-container">
-                <div className="skills-left">
-                    <h2>SKILLS</h2>
+                        {/* Project 1: Quick-GPT (MERN Stack) */}
+                        <div className="project-card project-css">
+                            <h3 className="name">
+                                <a className="name-link" href="https://shahadat-quick-gpt.netlify.app/" target="_blank" rel="noopener noreferrer">
+                                    Quick-GPT – AI Chat & Image Generation App
+                                </a>
+                            </h3>
+                            <p className="description">
+                                A production-ready AI chat application powered by the Gemini AI API. Built with a MongoDB backend featuring full chat history persistence. Utilizes TanStack Query for optimistic UI updates and data caching. Secured via JWT with Access/Refresh Token rotation in HttpOnly cookies, email verification, and Passport.js integration.
+                            </p>
+                            <div className="project-links">
+                                <h3 className="netlify">
+                                    <a href="https://shahadat-quick-gpt.netlify.app/" className="netlify-link" target="_blank" rel="noopener noreferrer">
+                                        <ExternalLink size={18} /> Live Demo
+                                    </a>
+                                </h3>
+                                <h3 className="github">
+                                    <a href="https://github.com/muhammad-shahadat/quick-gpt" className="github-link" target="_blank" rel="noopener noreferrer">
+                                        <Github size={18} /> GitHub Repository
+                                    </a>
+                                </h3>
+                            </div>
+                        </div>
+
+                        {/* Project 2: Shopper (PERN Stack) */}
+                        <div className="project-card project-css">
+                            <h3 className="name">
+                                <a className="name-link" href="https://shahadat-ecommerce.netlify.app/" target="_blank" rel="noopener noreferrer">
+                                    Shopper – Scalable E-Commerce Platform
+                                </a>
+                            </h3>
+                            <p className="description">
+                                A full-stack monorepo featuring an infinite self-referencing category tree and a multi-attribute variant matrix. Engineered with PostgreSQL and Express using ACID-compliant transaction orchestration (pg-pool) to prevent stock race-conditions. Optimized with TanStack Query and Zustand for persistence, automated SEO slugs, and automated Cloudinary asset cleanups.
+                            </p>
+                            <div className="project-links">
+                                <h3 className="netlify">
+                                    <a href="https://shahadat-ecommerce.netlify.app/" className="netlify-link" target="_blank" rel="noopener noreferrer">
+                                        <ExternalLink size={18} /> Live Demo
+                                    </a>
+                                </h3>
+                                <h3 className="github">
+                                    <a href="https://github.com/muhammad-shahadat/e-commerce" className="github-link" target="_blank" rel="noopener noreferrer">
+                                        <Github size={18} /> GitHub Repository
+                                    </a>
+                                </h3>
+                            </div>
+                        </div>
+
+
+
+                        <div className="project-card project-css">
+
+                            <h3 className="name">
+                                <a className="name-link" href="https://react-landing-page-shahadatian.netlify.app/" target="_blank" >
+                                    React Landing Page
+
+                                </a>
+                            </h3>
+
+                            <p className="description">
+                                A modern and responsive langing page built with React, Vite, Tailwind CSS and custom CSS. Coded from a figam file shared in a youtube tutorial also help of the tutor.Features include reusable components, slick carousel for card slider.
+                            </p>
+                            <h3 className="netlify">
+                                <a href="https://react-landing-page-shahadatian.netlify.app/" className="netlify-link" target="_blank" >
+                                    🔗 Live Demo
+                                </a>
+                            </h3>
+                            <h3 className="github">
+                                <a href="https://github.com/muhammad-shahadat/react-landing-page" className="github-link" target="_blank" >
+                                    💻 GitHub Repository
+                                </a>
+                            </h3>
+                            <p className="note" style={{ color: "#0f172a" }} >
+                                *Note: Design credit goes to the original Figma creator. This was a practice implementation.*
+                            </p>
+                        </div>
+
+                        {/* <div className="upcoming-project">
+
+                        </div> */}
+
+                    </div>
                 </div>
-                <div className="skills-right">
-                    <div className="skill-category">
-                        <h3 className="skill-title">
-                            Languages & Markup
+            </section>
 
-                        </h3>
-                        <ul className="skill-item">
-
-                            <li className="item-list">
-                                HTML
-                            </li>
-                            <li className="item-list">
-                                CSS
-                            </li>
-                            <li className="item-list">
-                                JavaScript 
-                            </li>
-                            <li className="item-list">
-                                C
-                            </li>
-                            <li className="item-list">
-                                C++
-                            </li>
-                        </ul>
+            {/* ================= SKILLS SECTION ================= */}
+            <section id="skills">
+                <div className="skills-container">
+                    <div className="skills-left">
+                        <h2>SKILLS</h2>
                     </div>
+                    <div className="skills-right">
+                        <div className="skill-category">
+                            <h3 className="skill-title">Languages & Core</h3>
+                            <ul className="skill-item">
+                                <li className="item-list">JavaScript</li>
+                                <li className="item-list">HTML</li>
+                                <li className="item-list">CSS</li>
+                                <li className="item-list">Java</li>
+                                <li className="item-list">C / C++</li>
+                            </ul>
+                        </div>
 
-                    <div className="skill-category">
-                            <h3 className="skill-title">
-                            Frameworks & Libraries
+                        <div className="skill-category">
+                            <h3 className="skill-title">Frontend Development</h3>
+                            <ul className="skill-item">
+                                <li className="item-list">React.js</li>
+                                <li className="item-list">TanStack Query</li>
+                                <li className="item-list">Zustand</li>
+                                <li className="item-list">Tailwind CSS</li>
+                                <li className="item-list">Bootstrap</li>
+                            </ul>
+                        </div>
 
-                        </h3>
-                        <ul className="skill-item">
+                        <div className="skill-category">
+                            <h3 className="skill-title">Backend & Databases</h3>
+                            <ul className="skill-item">
+                                <li className="item-list">Node.js</li>
+                                <li className="item-list">Express.js</li>
+                                <li className="item-list">PostgreSQL</li>
+                                <li className="item-list">MongoDB</li>
+                                <li className="item-list">MySQL</li>
+                            </ul>
+                        </div>
 
-                            <li className="item-list">
-                                React.js
-                            </li>
-                            <li className="item-list">
-                                Tailwind CSS
-                            </li>
-                            <li className="item-list">
-                                Bootstrap
-                            </li>
-                        </ul>
+                        <div className="skill-category">
+                            <h3 className="skill-title">Tools & Platforms</h3>
+                            <ul className="skill-item">
+                                <li className="item-list">Git & GitHub</li>
+                                <li className="item-list">Postman</li>
+                                <li className="item-list">Render / Netlify</li>
+                                <li className="item-list">VS Code</li>
+                                <li className="item-list">Figma</li>
+                            </ul>
+                        </div>
                     </div>
+                </div>
+            </section>
 
-                    <div className="skill-category">
-                        <h3 className="skill-title">
-                            Tools & Platforms
-
-                        </h3>
-                        <ul className="skill-item">
-
-                            <li className="item-list">
-                                Git & GitHub
-                            </li>
-                            <li className="item-list">
-                                Netlify
-                            </li>
-                            <li className="item-list">
-                                Vite
-                            </li>
-                            <li className="item-list">
-                                VS Code
-                            </li>
-                            <li className="item-list">
-                                Figma
-                            </li>
-                        </ul>
+            {/* ================= RESUME SECTION ================= */}
+            <section id="resume">
+                <div className="resume-container">
+                    <div className="resume-left">
+                        <h2>RESUME</h2>
                     </div>
-
-                    <div className="skill-category">
-                        <h3 className="skill-title">
-                            Currently Learning
-
-                        </h3>
-                        <ul className="skill-item">
-
-                            <li className="item-list">
-                                SQL
+                    <div className="resume-right">
+                        <ul className="resume-item">
+                            <li className="item-list resume-list">
+                                <a href="/resume/shahadat_hossain_resume.pdf" target="_blank" className="resume-link view-resume" rel="noopener noreferrer">
+                                    <Eye size={18} /> View Resume
+                                </a>
                             </li>
-                            <li className="item-list">
-                                Node.js
-                            </li>
-                            <li className="item-list">
-                                Express
+                            <li className="resume-list item-list">
+                                <a href="/resume/shahadat_hossain_resume.pdf" className="resume-link download-resume" download="md_shahadat_hossain_resume" rel="noopener noreferrer">
+                                    <Download size={18} /> Download Resume
+                                </a>
                             </li>
                         </ul>
                     </div>
                 </div>
-            </div>
+            </section>
 
-        </section>
-
-        <section id="resume">
-            <div className="resume-container">
-                <div className="resume-left">
-                    <h2>RESUME</h2>
+            {/* ================= CONTACTS SECTION ================= */}
+            <section id="contacts">
+                <div className="contacts-container">
+                    <div className="contacts-left">
+                        <h2>CONTACTS</h2>
+                    </div>
+                    <div className="contacts-right">
+                        <p className="contact-desc">
+                            I'm always open to exciting freelance or remote opportunities, project collaborations, or just a friendly tech chat. Feel free to reach out via email, phone, or WhatsApp. Let’s build something great together! 👇
+                        </p>
+                        <ul className="contact-item">
+                            <li className="item-list">
+                                <Mail size={18} className="contact-icon" />
+                                <a href="mailto:shahadat6640@gmail.com" target="_blank" rel="noopener noreferrer">
+                                    shahadat6640@gmail.com
+                                </a>
+                            </li>
+                            <li className="item-list">
+                                <MessageSquareCode size={18} className="contact-icon" />
+                                <a href="https://wa.me/8801811293727?text=Hello%20Shahadat%2C%20I%20visited%20your%20portfolio%20and%20was%20impressed%20with%20your%20projects.%20I'd%20like%20to%20connect%20with%20you%20regarding%20a%20freelance%20or%20remote%20opportunity." target="_blank" rel="noopener noreferrer">
+                                    WhatsApp: +880 1811-293727
+                                </a>
+                            </li>
+                            <li className="item-list">
+                                <Phone size={18} className="contact-icon" />
+                                <a href="tel:+8801811293727">
+                                    Personal: +880 1811-293727
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-
-                <div className="resume-right">
-
-                    <ul className="resume-item">
-                        <li className="item-list resume-list">
-                            👁️
-                            <a href={profile?.resume_url || "/resume/shahadat_hossain_resume.pdf"} target="_blank" className="resume-link view-resume">
-                                View Resume
-                            </a>
-                             
-                        </li>
-                        <li className="resume-list item-list">
-                            📥
-                            <a href={profile?.resume_url || "/resume/shahadat_hossain_resume.pdf"} className="resume-link download-resume" download="md_shahadat_hossain_resume" rel="noopener noreferrer">  
-                               Download Resume
-
-                            </a>
-                        </li>
-                    </ul>
-                </div>        
-
-            </div>
-
-        </section>
-
-        <section id="contacts">
-            <div className="contacts-container">
-                <div className="contacts-left">
-                    <h2>CONTACTS</h2>
-                </div>
-                <div className="contacts-right">
-                    <p className="contact-desc">
-                        I'm always open to exciting freelance or remote opportunities, project collaborations, or just a friendly tech chat. Feel free to reach out via email, phone, or WhatsApp. Let’s build something great together! 👇
-                    </p>
-                    <ul className="contact-item">
-                        <li className="item-list">
-                            📧 
-                            <a href="mailto:shahadat6640@gmail.com" target="_blank" >
-                                shahadat6640@gmail.com
-                            </a>
-                        </li>
-                        <li className="item-list">
-                            📱  
-                            <a href="https://wa.me/8801811293727?text=Hello%20Shahadat%2C%20I%20visited%20your%20portfolio%20and%20was%20impressed%20with%20your%20projects.%20I'd%20like%20to%20connect%20with%20you%20regarding%20a%20freelance%20or%20remote%20opportunity." target="_blank" rel="noopener noreferrer" >
-                                 WhatsApp: +880 1811-293727
-                            </a>
-                        </li>
-                        <li className="item-list">
-                            ☎️  
-                            <a href="tel:+8801811293727">
-                                Personal: +880 1811-293727
-
-                            </a>
-                        </li>
-
-                    </ul>
-                </div>
-            </div>
-
-        </section>
-    
-    </>
-  )
+            </section>
+        </>
+    );
 }
 
 export default Home;
+

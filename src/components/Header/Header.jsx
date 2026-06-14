@@ -1,92 +1,74 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { FaBars, FaTimes } from "react-icons/fa"; // FaTimes যোগ করা হয়েছে ক্লোজ আইকনের জন্য
+import { HashLink } from "react-router-hash-link";
+
 import "./Header.css";
-import  {FaBars } from "react-icons/fa";
-import {HashLink} from "react-router-hash-link"
 import navLogo from "../../assets/images/nav-logo.png";
 
-
-
-
 const Header = () => {
+  const [isExpandMenu, setIsExpandMenu] = useState(false);
+  const menuListRef = useRef(null);
 
-
-    const [isExpandMenu, setIsExpandMenu] = useState(false);
-    const menuListRef = useRef(null);
-
-
-    useEffect(() =>{
-        if (menuListRef.current) {
-            menuListRef.current.style.maxHeight = isExpandMenu ? "300px" : "0px";
-        }
-        
-    }, [isExpandMenu]);
-    
-    const toggleMenu = () =>{
-        setIsExpandMenu(!isExpandMenu);
-        
+  useEffect(() => {
+    if (menuListRef.current) {
+      menuListRef.current.style.maxHeight = isExpandMenu ? "320px" : "0px";
     }
+  }, [isExpandMenu]);
+
+  const toggleMenu = () => {
+    setIsExpandMenu(!isExpandMenu);
+  };
+
+  // মোবাইল মেনুর যেকোনো লিংকে ক্লিক করলে মেনু অটোমেটিক বন্ধ হয়ে যাবে
+  const closeMenu = () => {
+    setIsExpandMenu(false);
+  };
 
   return (
     <>
-        <nav>
-            <div className="navbar">
-                <div className="navbar-logo">
-                    <div className="logo">
-                        <img src={navLogo} alt="" />
-                    </div>
-                </div>
-                <div className="navbar-menu">
-                    <ul className="menu-list" ref={menuListRef} >
-                        <li>
-                            <HashLink smooth to="#hero">
-                                Home 
-                            </HashLink>
-                        </li>
-                        <li>
-                            <HashLink smooth to="#about-me">
-                                About Me
-                            </HashLink>
-                        </li>
-                        <li>
-                            <HashLink smooth to="#projects">
-                                Projects
-
-                            </HashLink>
-                        </li>
-
-                        <li>
-                            <HashLink smooth to="#skills">
-                                Skills
-
-                            </HashLink>
-                        </li>
-
-                        <li>
-                            <HashLink smooth to="#resume">
-                                Resume
-
-                            </HashLink>
-                        </li>
-
-                        <li>
-                            <HashLink smooth to="#contacts">
-                                Contacts
-                            </HashLink>
-                        </li>
-                        
-                            
-                    </ul>
-                </div>
-                <div className="hamburger-icon">
-                    <button onClick={toggleMenu}>
-                        <FaBars />
-                    </button>
-                </div>
+      <nav>
+        <div className="navbar">
+          <div className="navbar-logo">
+            <div className="logo">
+              <HashLink smooth to="#hero" onClick={closeMenu}>
+                <img src={navLogo} alt="Shahadat Portfolio Logo" />
+              </HashLink>
             </div>
-        </nav>  
-    
+          </div>
+          
+          <div className="navbar-menu">
+            <ul className="menu-list" ref={menuListRef}>
+              <li>
+                <HashLink smooth to="#hero" onClick={closeMenu}>Home</HashLink>
+              </li>
+              <li>
+                <HashLink smooth to="#about-me" onClick={closeMenu}>About Me</HashLink>
+              </li>
+              <li>
+                <HashLink smooth to="#projects" onClick={closeMenu}>Projects</HashLink>
+              </li>
+              <li>
+                <HashLink smooth to="#skills" onClick={closeMenu}>Skills</HashLink>
+              </li>
+              <li>
+                <HashLink smooth to="#resume" onClick={closeMenu}>Resume</HashLink>
+              </li>
+              <li>
+                <HashLink smooth to="#contacts" onClick={closeMenu}>Contacts</HashLink>
+              </li>
+            </ul>
+          </div>
+
+          <div className="hamburger-icon">
+            <button onClick={toggleMenu} aria-label="Toggle navigation">
+              {/* মেনু ওপেন থাকলে 'X' আইকন দেখাবে, বন্ধ থাকলে 'Bars' আইকন দেখাবে */}
+              {isExpandMenu ? <FaTimes /> : <FaBars />}
+            </button>
+          </div>
+        </div>
+      </nav>  
     </>
-  )
+  );
 }
 
 export default Header;
