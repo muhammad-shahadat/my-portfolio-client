@@ -8,7 +8,8 @@ import {
     Download,
     Mail,
     Phone,
-    MessageSquareCode
+    MessageSquareCode,
+
 } from "lucide-react";
 import { HashLink } from 'react-router-hash-link';
 
@@ -122,7 +123,36 @@ const Home = () => {
                         </div>
 
 
+                        {/* Project 3: Authentication System (MySQL Stack) */}
+                        <div className="project-card project-css">
 
+                            <h3 className="name">
+                                <a className="name-link" href="https://github.com/muhammad-shahadat/Node-Auth-System" target="_blank" rel="noopener noreferrer">
+                                    Secure Full-Stack Authentication System
+                                </a>
+                            </h3>
+
+                            {/* প্রজেক্টের ডেসক্রিপশন */}
+                            <p className="description">
+                                A production-ready RESTful authentication API built with Node.js, Express, and MySQL using connection pooling. Features secure JWT access and refresh token rotation orchestrated via HttpOnly cookies, complete email verification and password reset implementation using Nodemailer, and structured role-based access control (RBAC) with dedicated administrative management panels.
+                            </p>
+
+                            {/* শুধু গিটহাব লিংক কন্টেইনার (যেহেতু কোনো লাইভ ডেমো ইউআই নেই) */}
+                            <div className="project-links">
+                                <h3 className="github">
+                                    <a href="https://github.com/muhammad-shahadat/Node-Auth-System" className="github-link" target="_blank" rel="noopener noreferrer">
+                                        <Github size={18} /> GitHub Repository
+                                    </a>
+                                </h3>
+                            </div>
+
+                            {/* ব্যাকএন্ড প্রোজেক্টের জন্য বিশেষ নোট */}
+                            <p className="note" style={{ color: "#475569", marginTop: "12px", fontSize: "14px" }}>
+                                *Note: This is a robust backend core-system architecture focusing on deep API security, token orchestration, and database relational management.*
+                            </p>
+                        </div>
+
+                        {/* Project 4: React Landing Page */}
                         <div className="project-card project-css">
 
                             <h3 className="name">
@@ -137,16 +167,51 @@ const Home = () => {
                             </p>
                             <h3 className="netlify">
                                 <a href="https://react-landing-page-shahadatian.netlify.app/" className="netlify-link" target="_blank" >
-                                    🔗 Live Demo
+                                    <ExternalLink size={18} /> Live Demo
                                 </a>
                             </h3>
                             <h3 className="github">
                                 <a href="https://github.com/muhammad-shahadat/react-landing-page" className="github-link" target="_blank" >
-                                    💻 GitHub Repository
+                                    <Github size={18} /> GitHub Repository
                                 </a>
                             </h3>
                             <p className="note" style={{ color: "#0f172a" }} >
                                 *Note: Design credit goes to the original Figma creator. This was a practice implementation.*
+                            </p>
+                        </div>
+
+
+                        {/* Project 5: Car Auction Landing Page */}
+                        <div className="project-card project-css">
+                            {/* প্রজেক্টের নাম ও লাইভ লিংক */}
+                            <h3 className="name">
+                                <a className="name-link" href="https://figma-to-html-conversion.netlify.app" target="_blank" rel="noopener noreferrer">
+                                    Car Auction Landing Page
+                                </a>
+                            </h3>
+
+                            {/* প্রজেক্টের ডেসক্রিপশন */}
+                            <p className="description">
+                                A fully responsive car auction landing page built from a Figma design using HTML5, CSS3, Vanilla JavaScript, and Bootstrap 5. It features a pixel-perfect implementation of advanced search filters, active auction displays, popular car makes, and a custom-built responsive slider developed completely from scratch without external libraries.
+                            </p>
+
+                            {/* লাইভ ডেমো এবং গিটহাব লিংক কন্টেইনার */}
+                            <div className="project-links">
+                                <h3 className="netlify">
+                                    <a href="https://figma-to-html-conversion.netlify.app" className="netlify-link" target="_blank" rel="noopener noreferrer">
+                                        <ExternalLink size={18} /> Live Demo
+                                    </a>
+                                </h3>
+                                <h3 className="github">
+                                    <a href="https://github.com/muhammad-shahadat/Figma-html" className="github-link" target="_blank" rel="noopener noreferrer">
+                                        <Github size={18} /> GitHub Repository
+                                    </a>
+                                </h3>
+                            </div>
+
+                            {/* ডিজাইন ক্রেডিট ও নোট */}
+                            <p className="note" style={{ color: "#0f172a", marginTop: "12px" }}>
+                                *Note: Design credit goes to the original Figma creator. This was a frontend practice implementation focusing on UI/UX replication.*
                             </p>
                         </div>
 
